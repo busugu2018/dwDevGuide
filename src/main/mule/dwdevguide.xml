@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="27765118-e937-4b71-84e0-403f5619876e" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="dwdevguideFlow" doc:id="8d51a4a4-2592-4563-9a76-6d90b64683b0" >
+		<http:listener doc:name="Listener" doc:id="4a432fcb-3b7e-4066-abb5-47f9cbe7a5da" config-ref="HTTP_Listener_config" path="/dw1"/>
+		<ee:transform doc:name="Transform Message" doc:id="48eab09b-b71b-45c1-b064-df5acc19744b" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="responsedata1" ><![CDATA[%dw 2.0
+input payload application/json
+output application/json
+var nameVar = "kmar"
+var ageVar = 25
+fun testFun(obj) = {
+    "address": {
+        "city": obj.city,
+        "country": obj.country
+    }
+}
+---
+{
+    "name": nameVar,
+    "age": ageVar,
+    "address": testFun(
+        {
+            "city": "Milan",
+            "country": "Italy" 
+        }
+    )
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="ae57179f-c113-47e6-89f1-d1088760e07b" />
+	</flow>
+</mule>

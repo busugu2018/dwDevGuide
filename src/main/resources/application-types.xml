@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="dwData1" format="json">
+      <types:shape format="weave" example="examples/dwData1.json"><![CDATA[%dw 2.0
+
+type dwData1 = {|
+  responsedata: Array<{|    "type": String,     id: String,     attributes: {|      title: String,       body: String    |},     relationships: {|      author: {|        data: {|          id: String,           "type": String        |}      |}    |}  |}>, 
+  included: Array<{|    "type": String,     id: String,     details: {|      name: String,       age: Number {"typeId": "int"},       gender: String    |}  |}>
+|} {"example": "{\\\"responsedata\\\":[{\\\"type\\\":\\\"articles\\\",\\\"id\\\":\\\"1\\\",\\\"attributes\\\":{\\\"title\\\":\\\"JSON: API paints ny bikeshed!\\\",\\\"body\\\":\\\"The shortest article. Ever.\\\"},\\\"relationships\\\":{\\\"author\\\":{\\\"data\\\":{\\\"id\\\":\\\"42\\\",\\\"type\\\":\\\"people\\\"}}}}],\\\"included\\\":[{\\\"type\\\":\\\"people\\\",\\\"id\\\":\\\"42\\\",\\\"details\\\":{\\\"name\\\":\\\"John\\\",\\\"age\\\":80,\\\"gender\\\":\\\"male\\\"}}]}"}
+
+]]></types:shape>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#981a16ba-a729-45b8-a28a-99cc81790369">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="dwData1"/>
+        </types:message>
+      </types:input-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#48eab09b-b71b-45c1-b064-df5acc19744b"/>
+</types:mule>
